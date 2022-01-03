@@ -101,7 +101,7 @@ function App() {
       setLoading(true);
       const formData = new FormData();
       formData.append("file", file);
-      const API_URL = "ec2-3-135-186-130.us-east-2.compute.amazonaws.com/upload";
+      const API_URL = "ec2-3-135-186-130.us-east-2.compute.amazonaws.com:8080/upload";
       const response = await axios.post(API_URL, formData, {
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
@@ -112,7 +112,7 @@ function App() {
       });
       setPreview(response.data)
       console.log(response);
-      setDownloadUri("ec2-3-135-186-130.us-east-2.compute.amazonaws.com/download");
+      setDownloadUri("ec2-3-135-186-130.us-east-2.compute.amazonaws.com:8080/download");
       setSuccess(true);
       setLoading(false);
     } catch (err) {
