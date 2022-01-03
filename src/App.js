@@ -8,16 +8,13 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Divider from "@material-ui/core/Divider";
 import { useDropzone } from "react-dropzone";
-import RootRef from "@material-ui/core/RootRef";
 import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import { green } from "@material-ui/core/colors";
 import Button from "@material-ui/core/Button";
 import Fab from "@material-ui/core/Fab";
 import CheckIcon from "@material-ui/icons/Check";
 import CloudUpload from "@material-ui/icons/CloudUpload";
 import clsx from "clsx";
-import { LinearProgress } from "@material-ui/core";
 import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
@@ -79,6 +76,7 @@ function App() {
     [classes.buttonSuccess]: success,
   });
 
+
   const onDrop = React.useCallback((acceptedFiles) => {
     const fileDropped = acceptedFiles[0];
     console.log(fileDropped["type"])
@@ -95,13 +93,20 @@ function App() {
 
   const { ref, ...rootProps } = getRootProps();
 
+  const instance = axios.create({
+    baseURL: 'http://ec2-3-135-186-130.us-east-2.compute.amazonaws.com:8080',
+    headers : {
+      'Access-Control-Allow-Origin': '*'
+    },
+  })
+
   const uploadFile = async () => {
     try {
       setSuccess(false);
       setLoading(true);
       const formData = new FormData();
       formData.append("file", file);
-      const API_URL = "ec2-3-135-186-130.us-east-2.compute.amazonaws.com:8080/upload";
+      const API_URL = "http://ec2-3-135-186-130.us-east-2.compute.amazonaws.com:8080/upload";
       const response = await axios.post(API_URL, formData, {
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
@@ -112,7 +117,7 @@ function App() {
       });
       setPreview(response.data)
       console.log(response);
-      setDownloadUri("ec2-3-135-186-130.us-east-2.compute.amazonaws.com:8080/download");
+      setDownloadUri("http://ec2-3-135-186-130.us-east-2.compute.amazonaws.com/download");
       setSuccess(true);
       setLoading(false);
     } catch (err) {
